@@ -52,3 +52,19 @@ Be detailed and actionable.
     except Exception as e:
         print("Gemini Error:", e)
         return f"Gemini Error: {e}"
+
+from PIL import Image
+
+def extract_image_text(uploaded_file):
+    try:
+        image = Image.open(uploaded_file)
+
+        response = model.generate_content([
+            "Extract all text from this image exactly as written.",
+            image
+        ])
+
+        return response.text
+
+    except Exception as e:
+        return f"Image OCR Error: {e}"
