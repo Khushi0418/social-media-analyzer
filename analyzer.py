@@ -75,6 +75,7 @@ def analyze_caption(text):
         "hashtags": hashtags,
         "emojis": emojis,
         "cta": cta,
+        "sentiment": round(sentiment, 2),
         "strengths": strengths,
         "weaknesses": weaknesses
     }
