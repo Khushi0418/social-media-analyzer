@@ -11,27 +11,25 @@ genai.configure(api_key=api_key)
 
 model = genai.GenerativeModel("gemini-3.6-flash")
 
-def generate_ai_feedback(caption, platform):
+def generate_ai_feedback(prompt):
+    try:
+        print("Gemini function started")
 
-    prompt = f"""
-You are an expert social media strategist.
+        model = genai.GenerativeModel(
+            "models/gemini-3.6-flash"
+        )
 
-Analyze this caption:
+        print("Model created")
 
-{caption}
+        response = model.generate_content(
+            prompt,
+            request_options={"timeout": 20}
+        )
 
-Provide:
-1. Engagement reasoning
-2. Strengths
-3. Weaknesses
-4. Improved caption
-5. 15 hashtags
-6. Better CTA
-7. Tips to improve engagement
+        print("Response received")
 
-Format clearly.
-"""
+        return response.text
 
-    response = model.generate_content(prompt)
-
-    return response.text
+    except Exception as e:
+        print("Gemini Error:", e)
+        return f"Gemini Error: {e}"
