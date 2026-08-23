@@ -21,6 +21,25 @@ def generate_ai_feedback(caption, platform):
 
         print("Model created")
 
+        prompt = f"""
+Analyze the following {platform} social media caption.
+
+Caption:
+{caption}
+
+Provide:
+
+1. Engagement Reasoning
+2. Strengths
+3. Weaknesses
+4. Improved Caption
+5. Better Hashtags
+6. Better CTA
+7. Tips to Maximize Engagement
+
+Be detailed and actionable.
+"""
+
         response = model.generate_content(
             prompt,
             request_options={"timeout": 20}
