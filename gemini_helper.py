@@ -11,7 +11,7 @@ genai.configure(api_key=api_key)
 
 model = genai.GenerativeModel("gemini-3.6-flash")
 
-def generate_ai_feedback(prompt):
+def generate_ai_feedback(caption, platform):
     try:
         print("Gemini function started")
 
