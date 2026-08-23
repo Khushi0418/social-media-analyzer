@@ -1,8 +1,11 @@
+from PIL import Image
+import pytesseract
+import pdfplumber
 import streamlit as st
 
 from analyzer import analyze_caption
-from gemini_helper import generate_ai_feedback
-
+from gemini_helper import generate_ai_feedback, extract_image_text
+from extractor import extract_pdf_text
 st.set_page_config(
     page_title="AI Social Media Analyzer",
     page_icon="📈",
@@ -17,19 +20,70 @@ platform = st.selectbox(
     ["Instagram", "LinkedIn", "Twitter/X", "Facebook"]
 )
 
+uploaded_file = st.file_uploader(
+    "Upload PDF or Image",
+    type=["pdf", "png", "jpg", "jpeg"]
+)
+
 caption = st.text_area(
-    "Enter Caption",
+    "Or Enter Caption",
     height=200
 )
+if uploaded_file is not None:
+
+    if uploaded_file.type == "application/pdf":
+
+        text = ""
+
+        with pdfplumber.open(uploaded_file) as pdf:
+            for page in pdf.pages:
+                extracted = page.extract_text()
+                if extracted:
+                    text += extracted
+
+        caption = text
+
+    else:
+
+        caption = extract_image_text(uploaded_file)
+
+    st.success("Text extracted successfully!")
+
+    st.text_area(
+        "Extracted Text",
+        caption,
+        height=200
+    )
 
 if st.button("Analyze"):
 
     result = analyze_caption(caption)
 
-    st.metric(
-        "Engagement Score",
-        f"{result['score']}/10"
-    )
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric(
+            "Score",
+            f"{result['score']}/10"
+        )
+
+    with col2:
+        st.metric(
+            "Words",
+            result["words"]
+        )
+
+    with col3:
+        st.metric(
+            "Hashtags",
+            result["hashtags"]
+        )
+
+    with col4:
+        st.metric(
+            "Sentiment",
+            result["sentiment"]
+        )
 
     st.subheader("📊 Analysis Results")
 
