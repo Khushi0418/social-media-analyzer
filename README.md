@@ -8,6 +8,10 @@ The application extracts text from uploaded files and generates engagement insig
 
 ---
 
+## Live Demo
+
+🚀 [Open the Streamlit App](https://social-media-analyzer-nm6es7anpweuph9f6yzrky.streamlit.app/)
+
 ## Features
 
 ### Document Upload
